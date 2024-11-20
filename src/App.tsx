@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef, useState } from "react";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function Toolbox() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ position: "fixed", width: "100%", height: "min-content" }}>
+      <div
+        onClick={() => {
+          dispatchEvent(new CustomEvent("new div"));
+        }}
+        style={{
+          height: 50,
+          width: 50,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "2px solid red",
+          borderRadius: 5,
+          userSelect: "none",
+          cursor: "pointer",
+        }}
+      >
+        +
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+function App() {
+  const ref = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const newDivCallback = () => {
+      if (ref.current) {
+        const newDiv = document.createElement("div")
+        newDiv.style.height = '30px'
+        newDiv.style.width = '30px'
+        newDiv.style.backgroundColor = 'red'
+        ref.current.appendChild(newDiv)
+      }
+      console.log("HI");
+    };
+    window.addEventListener("new div", newDivCallback);
+    return () => {
+      window.removeEventListener("new div", newDivCallback);
+    };
+  }, []);
+
+  return (
+    <div ref={ref} style={{ height: "100%", width: "100%" }}>
+      <Toolbox />
+    </div>
+  );
+}
+
+export default App;
