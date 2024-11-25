@@ -4,11 +4,14 @@
 }
 
 .button {
-  height: 50px;
-  width: 50px;
+  height: min-content;
+  width: max-content;
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
   cursor: pointer;
+}
+
+.new-element {
 }
